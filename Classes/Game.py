@@ -1,5 +1,6 @@
 import pygame
 import os
+from Classes.Obstacle import Obstacle
 from Classes.Player import Player
 from Classes.Background import Background
 from dotenv import load_dotenv
@@ -38,6 +39,10 @@ class Game:
         # Game objects
         self.player = Player(84, 92)
         self.background = Background(BACKGROUND_PATH, self.screen_width, self.screen_height)
+
+        # Game Objects
+        self.obstacle = Obstacle(500, 400)
+
         
     def handle_events(self):
         for event in pygame.event.get():
@@ -46,10 +51,21 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     self.player.jump()
+
+        if self.player.rect.colliderect(self.obstacle.rect):
+            self.obstacle.collides(True)
+            # print("Collision detected!")
+            # self.running = False
+        else:
+            self.obstacle.collides(False)
+            
     
     def update(self):
         # Update player
         self.player.update(self.dt, self.screen_width, self.screen_height)
+        
+        # Update obstacle
+        self.obstacle.update(self.dt)
         
         # Update background
         self.background.update(self.dt)
@@ -57,7 +73,9 @@ class Game:
     def render(self):
         self.screen.fill('purple')
         self.background.draw(self.screen)
+        pygame.draw.rect(self.screen, (255, 0, 0), self.player.rect, 1)
         self.player.draw(self.screen)
+        self.obstacle.draw(self.screen)
         pygame.display.flip()
     
     def run(self):
