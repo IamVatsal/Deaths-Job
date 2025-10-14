@@ -1,6 +1,6 @@
 import os
 import time
-import pygame
+import pygame as pg
 from Classes.Entity import Entity
 from utils import clamp
 from dotenv import load_dotenv
@@ -10,7 +10,7 @@ load_dotenv()
 # Environment variables
 PLAYER_SPRITE_PATH = os.getenv('PLAYER_SPRITE_PATH', 'data/gfx/ghost.png')
 PLAYER_GRAVITY = int(os.getenv('PLAYER_GRAVITY', '800'))
-PLAYER_JUMP_STRENGTH_UP = int(os.getenv('PLAYER_JUMP_STRENGTH_UP', '-250'))
+PLAYER_JUMP_STRENGTH_UP = int(os.getenv('PLAYER_JUMP_STRENGTH_UP', '-200'))
 PLAYER_JUMP_STRENGTH_FORWARD = int(os.getenv('PLAYER_JUMP_STRENGTH_FORWARD', '50'))
 PLAYER_JUMP_COOLDOWN = float(os.getenv('PLAYER_JUMP_COOLDOWN', '0.05'))
 PLAYER_HORIZONTAL_DAMPING = int(os.getenv('PLAYER_HORIZONTAL_DAMPING', '200'))
@@ -19,7 +19,7 @@ PLAYER_MOVE_SPEED_VERTICAL = int(os.getenv('PLAYER_MOVE_SPEED_VERTICAL', '400'))
 PLAYER_MOVE_SPEED_HORIZONTAL = int(os.getenv('PLAYER_MOVE_SPEED_HORIZONTAL', '300'))
 
 class Player(Entity):
-    def __init__(self, x=84, y=92):
+    def __init__(self, x=432, y=243):
         super().__init__(x, y)
         
         # Physics constants
@@ -36,7 +36,7 @@ class Player(Entity):
         self.jump_cooldown = PLAYER_JUMP_COOLDOWN
         
         # Velocity (inherited from Entity but reset initial value)
-        self.velocity = pygame.Vector2(-50, 0)
+        self.velocity = pg.Vector2(-50, 0)
         
         # Load sprite AFTER Entity init
         self._load_sprite()
@@ -46,13 +46,13 @@ class Player(Entity):
     
     def _load_sprite(self):
         """Load and prepare player sprites"""
-        player_image = pygame.image.load(PLAYER_SPRITE_PATH).convert_alpha()
-        self.scaled_image = pygame.transform.smoothscale(
+        player_image = pg.image.load(PLAYER_SPRITE_PATH).convert_alpha()
+        self.scaled_image = pg.transform.smoothscale(
             player_image, 
             (player_image.get_width() // 4, player_image.get_height() // 4)
         )
         self.right_ghost = self.scaled_image
-        self.left_ghost = pygame.transform.flip(self.right_ghost, True, False)
+        self.left_ghost = pg.transform.flip(self.right_ghost, True, False)
         self.current_ghost = self.right_ghost
         
         self.width = self.scaled_image.get_width()
@@ -69,20 +69,22 @@ class Player(Entity):
     
     def handle_input(self, dt):
         """Handle keyboard input for movement"""
-        keys = pygame.key.get_pressed()
+        keys = pg.key.get_pressed()
         
-        if keys[pygame.K_w]:
+        if keys[pg.K_w]:
             self.position.y -= self.move_speed_vertical * dt
-        if keys[pygame.K_s]:
+        if keys[pg.K_s]:
             self.position.y += self.move_speed_vertical * dt
-        if keys[pygame.K_a]:
-            self.position.x -= self.move_speed_horizontal * dt
+        if keys[pg.K_a]:
+            # self.position.x -= self.move_speed_horizontal * dt
             self.current_ghost = self.left_ghost
             self.image = self.current_ghost
-        if keys[pygame.K_d]:
-            self.position.x += self.move_speed_horizontal * dt
+            self.jump_strength_forward = -abs(PLAYER_JUMP_STRENGTH_FORWARD)  # Ensure forward jump is left
+        if keys[pg.K_d]:
+            # self.position.x += self.move_speed_horizontal * dt
             self.current_ghost = self.right_ghost
             self.image = self.current_ghost
+            self.jump_strength_forward = abs(PLAYER_JUMP_STRENGTH_FORWARD) + 20 # Ensure forward jump is right to ensure player can jump over obstacles when moving right
     
     def apply_physics(self, dt):
         """Apply gravity and velocity"""
@@ -116,10 +118,19 @@ class Player(Entity):
         self.clamp_to_screen(screen_width, screen_height)
         self.sync_rect()  # Sync rect at the END
     
+    def reset(self):
+        """Reset player to initial state"""
+        self.position = pg.Vector2(432, 243)
+        self.velocity = pg.Vector2(-50, 0)
+        self.last_jump_time = 0
+        self.current_ghost = self.right_ghost
+        self.image = self.current_ghost
+        self.rect = self.get_rect()
+
     def draw(self, screen):
         """Render the player"""
         screen.blit(self.current_ghost, self.rect)
     
     def get_rect(self):
         """Return collision rectangle"""
-        return pygame.Rect(self.position.x, self.position.y, self.width, self.height)
+        return pg.Rect(self.position.x, self.position.y, self.width, self.height)

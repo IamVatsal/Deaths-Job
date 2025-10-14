@@ -1,5 +1,5 @@
 import os
-import pygame
+import pygame as pg
 from Classes.Entity import Entity
 from dotenv import load_dotenv
 
@@ -12,15 +12,15 @@ class Obstacle(Entity):
         super().__init__(x, y, image_path=OBSTACLE_IMAGE_PATH)
         self.speed = speed
         self.load_image(OBSTACLE_IMAGE_PATH)
-        self.rect = pygame.Rect(self.position.x, self.position.y, self.width, self.height)
+        self.rect = pg.Rect(self.position.x, self.position.y, self.width, self.height)
 
         # temp variables for testing
         self.color = (255, 0, 0)  # Red color for the rectangle
 
     def load_image(self, path):
         """Load sprite image and scale it down"""
-        self.image = pygame.image.load(path).convert_alpha()
-        self.image = pygame.transform.smoothscale(self.image, (self.image.get_width() // 2, self.image.get_height() // 1))
+        self.image = pg.image.load(path).convert_alpha()
+        self.image = pg.transform.smoothscale(self.image, (self.image.get_width() // 2, self.image.get_height() // 1))
         self.width = self.image.get_width()
         self.height = self.image.get_height()
 
@@ -37,6 +37,6 @@ class Obstacle(Entity):
 
     def draw(self, screen):
         """Draw the obstacle as a colored rectangle"""
-        pygame.draw.rect(screen, self.color, self.rect)
+        pg.draw.rect(screen, self.color, self.rect)
         if self.image:
             screen.blit(self.image, self.rect)

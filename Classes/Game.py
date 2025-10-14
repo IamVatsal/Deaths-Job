@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 import os
 from Classes.Obstacle import Obstacle
 from Classes.Player import Player
@@ -22,17 +22,17 @@ BACKGROUND_PATH = os.getenv('BACKGROUND_PATH', 'data/gfx/Clouds_1.png')
 
 class Game:
     def __init__(self):
-        pygame.init()
+        pg.init()
         self.screen_width = SCREEN_WIDTH
         self.screen_height = SCREEN_HEIGHT
-        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
-        pygame.display.set_caption(WINDOW_TITLE)
+        self.screen = pg.display.set_mode((self.screen_width, self.screen_height))
+        pg.display.set_caption(WINDOW_TITLE)
         
         # Load window icon
-        window_icon = pygame.image.load(GHOST_SPRITE_PATH).convert_alpha()
-        pygame.display.set_icon(window_icon)
+        window_icon = pg.image.load(GHOST_SPRITE_PATH).convert_alpha()
+        pg.display.set_icon(window_icon)
         
-        self.clock = pygame.time.Clock()
+        self.clock = pg.time.Clock()
         self.running = True
         self.dt = 0
         
@@ -45,11 +45,11 @@ class Game:
 
         
     def handle_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
                 self.running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+            elif event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
                     self.player.jump()
 
         if self.player.rect.colliderect(self.obstacle.rect):
@@ -73,10 +73,10 @@ class Game:
     def render(self):
         self.screen.fill('purple')
         self.background.draw(self.screen)
-        pygame.draw.rect(self.screen, (255, 0, 0), self.player.rect, 1)
+        pg.draw.rect(self.screen, (255, 0, 0), self.player.rect, 1)
         self.player.draw(self.screen)
         self.obstacle.draw(self.screen)
-        pygame.display.flip()
+        pg.display.flip()
     
     def run(self):
         while self.running:
@@ -85,4 +85,4 @@ class Game:
             self.render()
             self.dt = self.clock.tick(FPS) / 1000
         
-        pygame.quit()
+        pg.quit()

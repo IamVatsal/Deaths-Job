@@ -1,5 +1,5 @@
 import os
-import pygame
+import pygame as pg
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -15,8 +15,8 @@ BACKGROUND_IMAGE_PATH = os.getenv('BACKGROUND_IMAGE_PATH', 'data/gfx/Clouds_1.pn
 
 class Background:
     def __init__(self, image_path = BACKGROUND_IMAGE_PATH, screen_width = SCREEN_WIDTH, screen_height = SCREEN_HEIGHT, scroll_speed = BACKGROUND_SCROLL_SPEED):
-        self.image = pygame.image.load(image_path).convert_alpha()
-        self.image = pygame.transform.smoothscale(self.image, (screen_width, screen_height))
+        self.image = pg.image.load(image_path).convert_alpha()
+        self.image = pg.transform.smoothscale(self.image, (screen_width, screen_height))
         self.width = self.image.get_width()
         self.scroll_speed = scroll_speed
         

@@ -1,11 +1,11 @@
-import pygame
+import pygame as pg
 
 class Entity:
     """Base class for game entities"""
     def __init__(self, x, y, image_path=None):
         # Use Vector2 for precise float position
-        self.position = pygame.Vector2(float(x), float(y))
-        self.velocity = pygame.Vector2(0, 0)
+        self.position = pg.Vector2(float(x), float(y))
+        self.velocity = pg.Vector2(0, 0)
         self.image = None
         self.width = 0
         self.height = 0
@@ -15,7 +15,7 @@ class Entity:
     
     def load_image(self, path):
         """Load sprite image"""
-        self.image = pygame.image.load(path).convert_alpha()
+        self.image = pg.image.load(path).convert_alpha()
         self.width = self.image.get_width()
         self.height = self.image.get_height()
     
@@ -30,4 +30,4 @@ class Entity:
     
     def get_rect(self):
         """Get collision rectangle"""
-        return pygame.Rect(int(self.position.x), int(self.position.y), self.width, self.height)
+        return pg.Rect(int(self.position.x), int(self.position.y), self.width, self.height)
