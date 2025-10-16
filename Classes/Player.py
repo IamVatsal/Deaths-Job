@@ -2,7 +2,6 @@ import time
 import pygame as pg
 from Classes.Entity import Entity
 from Classes.Env import PLAYER_GRAVITY, PLAYER_HORIZONTAL_DAMPING, PLAYER_JUMP_COOLDOWN, PLAYER_JUMP_STRENGTH_FORWARD, PLAYER_JUMP_STRENGTH_UP, PLAYER_MIN_HORIZONTAL_VELOCITY, PLAYER_MOVE_SPEED_HORIZONTAL, PLAYER_MOVE_SPEED_VERTICAL, PLAYER_SPRITE_PATH, SCREEN_HEIGHT, SCREEN_WIDTH
-from utils import clamp
 
 class Player(Entity):
     def __init__(self, x = SCREEN_WIDTH // 2 - 100, y = SCREEN_HEIGHT // 2):
@@ -89,11 +88,18 @@ class Player(Entity):
         self.position.x += self.velocity.x * dt
         self.position.y += self.velocity.y * dt
     
+    def clamp(value, min_value, max_value):
+        if value < min_value:
+            return min_value
+        if value > max_value:
+            return max_value
+        return value
+
     def clamp_to_screen(self, screen_width, screen_height):
         """Keep player within screen bounds"""
-        self.position.x = clamp(self.position.x, 0, screen_width - self.width)
-        self.position.y = clamp(self.position.y, 0, screen_height - self.height)
-    
+        self.position.x = self.clamp(self.position.x, 0, screen_width - self.width)
+        self.position.y = self.clamp(self.position.y, 0, screen_height - self.height)
+
     def sync_rect(self):
         """Sync rect with position (call AFTER all movement/collision)"""
         self.rect.x = int(self.position.x)
