@@ -1,17 +1,5 @@
-import os
 import pygame as pg
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
-
-# Environment variables
-# Screen settings
-SCREEN_WIDTH = int(os.getenv('SCREEN_WIDTH', 864))
-SCREEN_HEIGHT = int(os.getenv('SCREEN_HEIGHT', 486))
-BACKGROUND_SCROLL_SPEED = int(os.getenv('BACKGROUND_SCROLL_SPEED', 35))
-# Asset paths
-BACKGROUND_IMAGE_PATH = os.getenv('BACKGROUND_IMAGE_PATH', 'data/gfx/Clouds_1.png')
+from Classes.Env import SCREEN_WIDTH, SCREEN_HEIGHT, BACKGROUND_IMAGE_PATH, BACKGROUND_SCROLL_SPEED
 
 class Background:
     def __init__(self, image_path = BACKGROUND_IMAGE_PATH, screen_width = SCREEN_WIDTH, screen_height = SCREEN_HEIGHT, scroll_speed = BACKGROUND_SCROLL_SPEED):

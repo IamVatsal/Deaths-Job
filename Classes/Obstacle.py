@@ -1,11 +1,6 @@
-import os
 import pygame as pg
 from Classes.Entity import Entity
-from dotenv import load_dotenv
-
-load_dotenv()
-
-OBSTACLE_IMAGE_PATH = os.getenv("OBSTACLE_IMAGE_PATH", "data/gfx/fence.png")
+from Classes.Env import OBSTACLE_IMAGE_PATH
 
 class Obstacle(Entity):
     def __init__(self, x, y, speed = 35):
@@ -30,13 +25,17 @@ class Obstacle(Entity):
         self.rect.topleft = (int(self.position.x), int(self.position.y))
     
     def collides(self, is_colliding):
+        # Change color based on collision state (for debugging)
         if is_colliding:
             self.color = (0, 255, 0)  # Change color to green on collision
         else:
             self.color = (255, 0, 0)  # Change color back to red after collision
 
     def draw(self, screen):
-        """Draw the obstacle as a colored rectangle"""
-        pg.draw.rect(screen, self.color, self.rect)
+        """Draw the obstacle"""
+        # Draw collision box first (for debugging)
+        pg.draw.rect(screen, self.color, self.rect, 1)  # Draw border only
+    
+        # Draw image on top
         if self.image:
             screen.blit(self.image, self.rect)

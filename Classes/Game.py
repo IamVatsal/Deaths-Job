@@ -1,26 +1,12 @@
 import pygame as pg
-import os
-from Classes.Obstacle import Obstacle
+from Classes.Obstacles import Obstacles
 from Classes.Player import Player
 from Classes.Background import Background
-from dotenv import load_dotenv
+from Classes.SplashScreen import SplashScreen
+from Classes.Env import SCREEN_HEIGHT, SCREEN_WIDTH, FPS, WINDOW_TITLE, GHOST_SPRITE_PATH, BACKGROUND_PATH
+from Classes.GameState import GameState
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Environment variables
-# Screen settings
-SCREEN_WIDTH = int(os.getenv('SCREEN_WIDTH', 864))
-SCREEN_HEIGHT = int(os.getenv('SCREEN_HEIGHT', 486))
-FPS = int(os.getenv('FPS', 60))
-WINDOW_TITLE = os.getenv('WINDOW_TITLE', "Death's Job")
-
-# Asset paths
-GHOST_SPRITE_PATH = os.getenv('GHOST_SPRITE_PATH', 'data/gfx/ghost.png')
-BACKGROUND_PATH = os.getenv('BACKGROUND_PATH', 'data/gfx/Clouds_1.png')
-
-
-class Game:
+class Game1:
     def __init__(self):
         pg.init()
         self.screen_width = SCREEN_WIDTH
@@ -37,45 +23,68 @@ class Game:
         self.dt = 0
         
         # Game objects
-        self.player = Player(84, 92)
+        self.player = Player(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 100)
         self.background = Background(BACKGROUND_PATH, self.screen_width, self.screen_height)
 
         # Game Objects
-        self.obstacle = Obstacle(500, 400)
+        # self.obstacle = Obstacle(500, 400)
+        self.obstacles = Obstacles(num_of_obstacles=10)
+
+        # Splash Screen
+        self.SplashScreen = SplashScreen(self.screen_width, self.screen_height)
+
+        self.current_state = GameState.SPLASH
+        self.current_screen = 'splash'
 
         
     def handle_events(self):
+
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
+            elif event.type == pg.MOUSEBUTTONDOWN:
+                if self.current_state == GameState.SPLASH and self.SplashScreen.collide(event.pos):
+                    self.current_state = GameState.PLAYING
             elif event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    self.player.jump()
+                if event.key == pg.K_SPACE: 
+                    if self.current_state == GameState.PLAYING:
+                        self.player.jump()
+                    if self.current_state == GameState.SPLASH:
+                        self.current_state = GameState.PLAYING
+                if event.key == pg.K_ESCAPE:
+                    if self.current_state == GameState.PLAYING:
+                        self.current_state = GameState.SPLASH
+                    elif self.current_state == GameState.SPLASH:
+                        self.running = False
 
-        if self.player.rect.colliderect(self.obstacle.rect):
-            self.obstacle.collides(True)
-            # print("Collision detected!")
-            # self.running = False
-        else:
-            self.obstacle.collides(False)
-            
-    
     def update(self):
-        # Update player
-        self.player.update(self.dt, self.screen_width, self.screen_height)
-        
-        # Update obstacle
-        self.obstacle.update(self.dt)
-        
-        # Update background
-        self.background.update(self.dt)
+        if self.current_state == GameState.SPLASH:
+            self.SplashScreen.collide(pg.mouse.get_pos())
+        else:
+            # Update player
+            self.player.update(self.dt, self.screen_width, self.screen_height)
+            
+            # Update obstacle
+            self.obstacles.update(self.dt)
+            
+            # Update background
+            self.background.update(self.dt)
+
+            if self.obstacles.check_collisions(self.player.rect):
+                self.current_state = GameState.SPLASH
+                self.player.reset()
+                self.obstacles.reset()
+                # print("Collision detected!")
+                # self.running = False
     
     def render(self):
-        self.screen.fill('purple')
-        self.background.draw(self.screen)
-        pg.draw.rect(self.screen, (255, 0, 0), self.player.rect, 1)
-        self.player.draw(self.screen)
-        self.obstacle.draw(self.screen)
+        if self.current_state == GameState.SPLASH:
+            self.SplashScreen.draw(self.screen)
+        else:
+            self.screen.fill('purple')
+            self.background.draw(self.screen)
+            self.player.draw(self.screen)
+            self.obstacles.draw(self.screen)
         pg.display.flip()
     
     def run(self):

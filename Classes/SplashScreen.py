@@ -1,19 +1,5 @@
-import os
 import pygame as pg
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
-
-# Environment variables
-# Screen settings
-SCREEN_WIDTH = int(os.getenv('SCREEN_WIDTH', 864))
-SCREEN_HEIGHT = int(os.getenv('SCREEN_HEIGHT', 486))
-FPS = int(os.getenv('FPS', 60))
-WINDOW_TITLE = os.getenv('WINDOW_TITLE', "Death's Job")
-
-# Asset paths
-SPLASH_SCREEN_BG = os.getenv('SPLASH_SCREEN_BG', 'data/gfx/castle.png')
+from Classes.Env import SCREEN_WIDTH, SCREEN_HEIGHT, SPLASH_SCREEN_BG
 
 class SplashScreen():
     def __init__(self, screen_width = SCREEN_WIDTH, screen_height = SCREEN_HEIGHT):

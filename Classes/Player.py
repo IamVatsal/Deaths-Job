@@ -1,25 +1,11 @@
-import os
 import time
 import pygame as pg
 from Classes.Entity import Entity
+from Classes.Env import PLAYER_GRAVITY, PLAYER_HORIZONTAL_DAMPING, PLAYER_JUMP_COOLDOWN, PLAYER_JUMP_STRENGTH_FORWARD, PLAYER_JUMP_STRENGTH_UP, PLAYER_MIN_HORIZONTAL_VELOCITY, PLAYER_MOVE_SPEED_HORIZONTAL, PLAYER_MOVE_SPEED_VERTICAL, PLAYER_SPRITE_PATH, SCREEN_HEIGHT, SCREEN_WIDTH
 from utils import clamp
-from dotenv import load_dotenv
-
-load_dotenv()
-
-# Environment variables
-PLAYER_SPRITE_PATH = os.getenv('PLAYER_SPRITE_PATH', 'data/gfx/ghost.png')
-PLAYER_GRAVITY = int(os.getenv('PLAYER_GRAVITY', '800'))
-PLAYER_JUMP_STRENGTH_UP = int(os.getenv('PLAYER_JUMP_STRENGTH_UP', '-200'))
-PLAYER_JUMP_STRENGTH_FORWARD = int(os.getenv('PLAYER_JUMP_STRENGTH_FORWARD', '50'))
-PLAYER_JUMP_COOLDOWN = float(os.getenv('PLAYER_JUMP_COOLDOWN', '0.05'))
-PLAYER_HORIZONTAL_DAMPING = int(os.getenv('PLAYER_HORIZONTAL_DAMPING', '200'))
-PLAYER_MIN_HORIZONTAL_VELOCITY = int(os.getenv('PLAYER_MIN_HORIZONTAL_VELOCITY', '-50'))
-PLAYER_MOVE_SPEED_VERTICAL = int(os.getenv('PLAYER_MOVE_SPEED_VERTICAL', '400'))
-PLAYER_MOVE_SPEED_HORIZONTAL = int(os.getenv('PLAYER_MOVE_SPEED_HORIZONTAL', '300'))
 
 class Player(Entity):
-    def __init__(self, x=432, y=243):
+    def __init__(self, x = SCREEN_WIDTH // 2 - 100, y = SCREEN_HEIGHT // 2):
         super().__init__(x, y)
         
         # Physics constants
@@ -30,6 +16,7 @@ class Player(Entity):
         self.min_horizontal_velocity = PLAYER_MIN_HORIZONTAL_VELOCITY
         self.move_speed_vertical = PLAYER_MOVE_SPEED_VERTICAL
         self.move_speed_horizontal = PLAYER_MOVE_SPEED_HORIZONTAL
+        self.facing_right = True
         
         # Jump cooldown
         self.last_jump_time = 0
@@ -53,8 +40,12 @@ class Player(Entity):
         )
         self.right_ghost = self.scaled_image
         self.left_ghost = pg.transform.flip(self.right_ghost, True, False)
-        self.current_ghost = self.right_ghost
-        
+        if self.facing_right:
+            self.current_ghost = self.right_ghost
+        else:
+            self.current_ghost = self.left_ghost
+            self.facing_right = False
+
         self.width = self.scaled_image.get_width()
         self.height = self.scaled_image.get_height()
         self.image = self.current_ghost
@@ -64,28 +55,25 @@ class Player(Entity):
         current_time = time.time()
         if current_time - self.last_jump_time > self.jump_cooldown:
             self.velocity.y = self.jump_strength_up
-            self.velocity.x = self.jump_strength_forward
+            if self.facing_right:
+                self.velocity.x = abs(self.jump_strength_forward) + 20
+            else:
+                self.velocity.x = -abs(self.jump_strength_forward)
             self.last_jump_time = current_time
     
     def handle_input(self, dt):
         """Handle keyboard input for movement"""
         keys = pg.key.get_pressed()
         
-        if keys[pg.K_w]:
-            self.position.y -= self.move_speed_vertical * dt
-        if keys[pg.K_s]:
-            self.position.y += self.move_speed_vertical * dt
         if keys[pg.K_a]:
-            # self.position.x -= self.move_speed_horizontal * dt
             self.current_ghost = self.left_ghost
             self.image = self.current_ghost
-            self.jump_strength_forward = -abs(PLAYER_JUMP_STRENGTH_FORWARD)  # Ensure forward jump is left
+            self.facing_right = False
         if keys[pg.K_d]:
-            # self.position.x += self.move_speed_horizontal * dt
             self.current_ghost = self.right_ghost
             self.image = self.current_ghost
-            self.jump_strength_forward = abs(PLAYER_JUMP_STRENGTH_FORWARD) + 20 # Ensure forward jump is right to ensure player can jump over obstacles when moving right
-    
+            self.facing_right = True
+
     def apply_physics(self, dt):
         """Apply gravity and velocity"""
         # Apply gravity
@@ -120,15 +108,18 @@ class Player(Entity):
     
     def reset(self):
         """Reset player to initial state"""
-        self.position = pg.Vector2(432, 243)
+        self.position = pg.Vector2(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2)
         self.velocity = pg.Vector2(-50, 0)
         self.last_jump_time = 0
         self.current_ghost = self.right_ghost
         self.image = self.current_ghost
+        self.facing_right = True
         self.rect = self.get_rect()
-
+        
     def draw(self, screen):
         """Render the player"""
+        # For debugging: draw rect
+        pg.draw.rect(screen, (255, 0, 0), self.rect, 1)
         screen.blit(self.current_ghost, self.rect)
     
     def get_rect(self):

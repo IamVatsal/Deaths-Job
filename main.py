@@ -1,4 +1,4 @@
-from Classes.Game1 import Game1
+from Classes.Game import Game1
 
 def main():
     game = Game1()
