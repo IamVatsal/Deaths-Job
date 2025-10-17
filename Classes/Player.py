@@ -88,7 +88,7 @@ class Player(Entity):
         self.position.x += self.velocity.x * dt
         self.position.y += self.velocity.y * dt
     
-    def clamp(value, min_value, max_value):
+    def clamp(self, value, min_value, max_value):
         if value < min_value:
             return min_value
         if value > max_value:

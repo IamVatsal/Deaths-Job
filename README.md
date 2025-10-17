@@ -115,7 +115,6 @@ Death's Job/
 - **[`Classes/SplashScreen.py`](Classes/SplashScreen.py)**: Interactive start screen with button hover effects
 - **[`Classes/Entity.py`](Classes/Entity.py)**: Base class for all game entities with position, velocity, and image loading
 - **[`Classes/Env.py`](Classes/Env.py)**: Loads configuration from [.env](.env) file using python-dotenv
-- **[`utils.py`](utils.py)**: Utility functions including [`clamp`](utils.py) for boundary checking
 
 ## 🎨 Customization
 
