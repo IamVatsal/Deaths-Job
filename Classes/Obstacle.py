@@ -4,11 +4,11 @@ from Classes.Env import OBSTACLE_IMAGE_PATH
 
 class Obstacle(Entity):
     def __init__(self, x, y, speed = 35):
-        super().__init__(x, y, image_path=OBSTACLE_IMAGE_PATH)
+        super().__init__(x, y)
         self.speed = speed
         self.load_image(OBSTACLE_IMAGE_PATH)
         self.rect = pg.Rect(self.position.x, self.position.y, self.width, self.height)
-
+        self.mask = pg.mask.from_surface(self.image)
         # temp variables for testing
         self.color = (255, 0, 0)  # Red color for the rectangle
 

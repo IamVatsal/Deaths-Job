@@ -71,7 +71,7 @@ class Game1:
             # Update background
             self.background.update(self.dt)
 
-            if self.obstacles.check_collisions(self.player.rect):
+            if self.obstacles.check_collisions(self.player):
                 self.current_state = GameState.SPLASH
                 self.player.reset()
                 self.obstacles.reset()

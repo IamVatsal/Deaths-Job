@@ -1,8 +1,9 @@
 import pygame as pg
 
-class Entity:
+class Entity(pg.sprite.Sprite):
     """Base class for game entities"""
     def __init__(self, x, y, image_path=None):
+        super().__init__()
         # Use Vector2 for precise float position
         self.position = pg.Vector2(float(x), float(y))
         self.velocity = pg.Vector2(0, 0)

@@ -1,4 +1,5 @@
 import random
+import pygame as pg
 from Classes.Env import OBSTACLE_HORIZONTAL_GAP_MAX, OBSTACLE_HORIZONTAL_GAP_MIN, OBSTACLE_VERTICAL_GAP_MAX, OBSTACLE_VERTICAL_GAP_MIN, SCREEN_HEIGHT, SCREEN_WIDTH
 from Classes.Obstacle import Obstacle
 
@@ -15,7 +16,7 @@ class Obstacles:
         self.gap_size_x_max = OBSTACLE_HORIZONTAL_GAP_MAX
         self.gap_size_y_min = OBSTACLE_VERTICAL_GAP_MIN
         self.gap_size_y_max = OBSTACLE_VERTICAL_GAP_MAX
-        
+        self.Obstacle_group = pg.sprite.Group()
         # Initial spawn 
         self._spawn_initial_obstacles()
 
@@ -29,12 +30,14 @@ class Obstacles:
 
             # Create bottom obstacle
             bottom_obstacle = Obstacle(current_x, y_bottom)
+            self.Obstacle_group.add(bottom_obstacle)
             self.obstacles_bottom.append(bottom_obstacle)
 
             # Create top obstacle (above the bottom one with a gap)
             gap_size_y = random.randrange(self.gap_size_y_min, self.gap_size_y_max)
             y_top = y_bottom - gap_size_y - bottom_obstacle.height
             top_obstacle = Obstacle(current_x, y_top)
+            self.Obstacle_group.add(top_obstacle)
             self.obstacles_top.append(top_obstacle)
             
             # Calculate next X position (add obstacle width + gap)
@@ -92,21 +95,26 @@ class Obstacles:
             obstacle_bottom.draw(screen)
             obstacle_top.draw(screen)
 
-    def check_collisions(self, player_rect):
+    def check_collisions(self, player):
         """Check collisions with all obstacles and return if any collision occurred"""
         collision_detected = False
         
         for obstacle_top, obstacle_bottom in zip(self.obstacles_top, self.obstacles_bottom):
-            if player_rect.colliderect(obstacle_top.rect) or player_rect.colliderect(obstacle_bottom.rect):
-                collision_detected = True
+            
+            # Genral collision detection loop For Ractangles
+            if player.rect.colliderect(obstacle_top.rect) or player.rect.colliderect(obstacle_bottom.rect):
+
+                # Precise pixel-perfect collision detection
+                if pg.sprite.spritecollide(player, self.Obstacle_group, False, pg.sprite.collide_mask):
+                    collision_detected = True
                 # Following lines are for debugging collision colors
                 obstacle_top.collides(True)
                 obstacle_bottom.collides(True)
             else:
                 # Reset colors if no collision (for debugging)
                 obstacle_top.collides(False)
-                obstacle_bottom.collides(False)
-        
+                obstacle_bottom.collides(False)      
+
         return collision_detected
     
     def reset(self):

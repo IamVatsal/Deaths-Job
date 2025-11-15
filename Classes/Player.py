@@ -29,6 +29,8 @@ class Player(Entity):
         
         # Create rect from position (SINGLE source of truth: self.position)
         self.rect = self.get_rect()
+
+        self.mask = pg.mask.from_surface(self.image)
     
     def _load_sprite(self):
         """Load and prepare player sprites"""
