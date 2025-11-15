@@ -73,11 +73,11 @@ class Player(Entity):
         """Handle keyboard input for movement"""
         keys = pg.key.get_pressed()
         
-        if keys[pg.K_a]:
+        if keys[pg.K_a] or keys[pg.K_LEFT]:
             self.current_ghost = self.left_ghost
             self.image = self.current_ghost
             self.facing_right = False
-        if keys[pg.K_d]:
+        if keys[pg.K_d] or keys[pg.K_RIGHT]:
             self.current_ghost = self.right_ghost
             self.image = self.current_ghost
             self.facing_right = True
