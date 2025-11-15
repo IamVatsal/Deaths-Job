@@ -1,6 +1,6 @@
 import random
 import pygame as pg
-from Classes.Env import OBSTACLE_HORIZONTAL_GAP_MAX, OBSTACLE_HORIZONTAL_GAP_MIN, OBSTACLE_VERTICAL_GAP_MAX, OBSTACLE_VERTICAL_GAP_MIN, SCREEN_HEIGHT, SCREEN_WIDTH
+from Classes.Env import OBSTACLE_HORIZONTAL_GAP_MAX, OBSTACLE_HORIZONTAL_GAP_MIN, OBSTACLE_VERTICAL_GAP_MAX, OBSTACLE_VERTICAL_GAP_MIN, SCREEN_HEIGHT, SCREEN_WIDTH, COLLISION_SOUND_PATH
 from Classes.Obstacle import Obstacle
 
 class Obstacles:
@@ -17,6 +17,12 @@ class Obstacles:
         self.gap_size_y_min = OBSTACLE_VERTICAL_GAP_MIN
         self.gap_size_y_max = OBSTACLE_VERTICAL_GAP_MAX
         self.Obstacle_group = pg.sprite.Group()
+
+        # Sound
+        pg.mixer.init()
+        pg.mixer.pre_init(44100, -16, 2, 512)
+        self.collision_sound = pg.mixer.Sound(COLLISION_SOUND_PATH)
+
         # Initial spawn 
         self._spawn_initial_obstacles()
 
@@ -107,13 +113,8 @@ class Obstacles:
                 # Precise pixel-perfect collision detection
                 if pg.sprite.spritecollide(player, self.Obstacle_group, False, pg.sprite.collide_mask):
                     collision_detected = True
-                # Following lines are for debugging collision colors
-                obstacle_top.collides(True)
-                obstacle_bottom.collides(True)
-            else:
-                # Reset colors if no collision (for debugging)
-                obstacle_top.collides(False)
-                obstacle_bottom.collides(False)      
+                    self.collision_sound.play()
+                    break  # Exit loop on first collision detected
 
         return collision_detected
     

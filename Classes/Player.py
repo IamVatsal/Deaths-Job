@@ -1,7 +1,7 @@
 import time
 import pygame as pg
 from Classes.Entity import Entity
-from Classes.Env import PLAYER_GRAVITY, PLAYER_HORIZONTAL_DAMPING, PLAYER_JUMP_COOLDOWN, PLAYER_JUMP_STRENGTH_FORWARD, PLAYER_JUMP_STRENGTH_UP, PLAYER_MIN_HORIZONTAL_VELOCITY, PLAYER_MOVE_SPEED_HORIZONTAL, PLAYER_MOVE_SPEED_VERTICAL, PLAYER_SPRITE_PATH, SCREEN_HEIGHT, SCREEN_WIDTH
+from Classes.Env import PLAYER_GRAVITY, PLAYER_HORIZONTAL_DAMPING, PLAYER_JUMP_COOLDOWN, PLAYER_JUMP_STRENGTH_FORWARD, PLAYER_JUMP_STRENGTH_UP, PLAYER_MIN_HORIZONTAL_VELOCITY, PLAYER_MOVE_SPEED_HORIZONTAL, PLAYER_MOVE_SPEED_VERTICAL, PLAYER_SPRITE_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, JUMP_SOUND_PATH
 
 class Player(Entity):
     def __init__(self, x = SCREEN_WIDTH // 2 - 100, y = SCREEN_HEIGHT // 2):
@@ -17,6 +17,12 @@ class Player(Entity):
         self.move_speed_horizontal = PLAYER_MOVE_SPEED_HORIZONTAL
         self.facing_right = True
         
+        # Sound
+        pg.mixer.init()
+        pg.mixer.pre_init(44100, -16, 2, 512)
+        self.jump_sound = pg.mixer.Sound(JUMP_SOUND_PATH)
+        self.jump_sound.set_volume(0.1)
+
         # Jump cooldown
         self.last_jump_time = 0
         self.jump_cooldown = PLAYER_JUMP_COOLDOWN
@@ -56,6 +62,7 @@ class Player(Entity):
         current_time = time.time()
         if current_time - self.last_jump_time > self.jump_cooldown:
             self.velocity.y = self.jump_strength_up
+            self.jump_sound.play()
             if self.facing_right:
                 self.velocity.x = abs(self.jump_strength_forward) + 20
             else:
@@ -127,7 +134,7 @@ class Player(Entity):
     def draw(self, screen):
         """Render the player"""
         # For debugging: draw rect
-        pg.draw.rect(screen, (255, 0, 0), self.rect, 1)
+        # pg.draw.rect(screen, (255, 0, 0), self.rect, 1)
         screen.blit(self.current_ghost, self.rect)
     
     def get_rect(self):

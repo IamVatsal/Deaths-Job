@@ -18,6 +18,7 @@ WINDOW_TITLE = os.getenv('WINDOW_TITLE', "Death's Job")
 BACKGROUND_SCROLL_SPEED = int(os.getenv('BACKGROUND_SCROLL_SPEED', '35'))
 
 # Asset paths
+# Graphics paths
 GHOST_SPRITE_PATH = os.getenv('GHOST_SPRITE_PATH', 'data/gfx/ghost.png')
 BACKGROUND_PATH = os.getenv('BACKGROUND_PATH', 'data/gfx/background.png')
 OBSTACLE_IMAGE_PATH = os.getenv("OBSTACLE_IMAGE_PATH", "data/gfx/poll_new.png")
@@ -26,6 +27,12 @@ START_BUTTON_IMAGE = os.getenv('START_BUTTON_IMAGE', 'data/gfx/start_button_norm
 EXIT_BUTTON_IMAGE = os.getenv('EXIT_BUTTON_IMAGE', 'data/gfx/exit_button_normal.png')
 START_BUTTON_HOVER_IMAGE = os.getenv('START_BUTTON_HOVER_IMAGE', 'data/gfx/start_button_hover.png')
 EXIT_BUTTON_HOVER_IMAGE = os.getenv('EXIT_BUTTON_HOVER_IMAGE', 'data/gfx/exit_button_hover.png')
+
+# Sound paths
+JUMP_SOUND_PATH = os.getenv('JUMP_SOUND_PATH', 'data/sfx/flap.wav')
+BUTTON_CLICK_SOUND_PATH = os.getenv('BUTTON_CLICK_SOUND_PATH', 'data/sfx/button_click.wav')
+COLLISION_SOUND_PATH = os.getenv('COLLISION_SOUND_PATH', 'data/sfx/collision_sound.wav')
+BACKGROUND_MUSIC_PATH = os.getenv('BACKGROUND_MUSIC_PATH', 'data/sfx/bgm-blues-guitar-loop-192099.mp3')
 
 # Player environment variables
 PLAYER_SPRITE_PATH = os.getenv('PLAYER_SPRITE_PATH', 'data/gfx/ghost.png')

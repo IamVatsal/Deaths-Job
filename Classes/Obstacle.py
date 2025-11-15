@@ -9,8 +9,6 @@ class Obstacle(Entity):
         self.load_image(OBSTACLE_IMAGE_PATH)
         self.rect = pg.Rect(self.position.x, self.position.y, self.width, self.height)
         self.mask = pg.mask.from_surface(self.image)
-        # temp variables for testing
-        self.color = (255, 0, 0)  # Red color for the rectangle
 
     def load_image(self, path):
         """Load sprite image and scale it down"""
@@ -23,19 +21,9 @@ class Obstacle(Entity):
         """Move the obstacle leftwards and update its rect"""
         self.position.x -= self.speed * dt
         self.rect.topleft = (int(self.position.x), int(self.position.y))
-    
-    def collides(self, is_colliding):
-        # Change color based on collision state (for debugging)
-        if is_colliding:
-            self.color = (0, 255, 0)  # Change color to green on collision
-        else:
-            self.color = (255, 0, 0)  # Change color back to red after collision
 
     def draw(self, screen):
         """Draw the obstacle"""
-        # Draw collision box first (for debugging)
-        pg.draw.rect(screen, self.color, self.rect, 1)  # Draw border only
-    
-        # Draw image on top
+        # Draw image
         if self.image:
             screen.blit(self.image, self.rect)
