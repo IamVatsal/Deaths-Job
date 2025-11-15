@@ -1,8 +1,8 @@
 import pygame as pg
-from Classes.Env import SCREEN_WIDTH, SCREEN_HEIGHT, BACKGROUND_IMAGE_PATH, BACKGROUND_SCROLL_SPEED
+from Classes.Env import SCREEN_WIDTH, SCREEN_HEIGHT, BACKGROUND_PATH, BACKGROUND_SCROLL_SPEED
 
 class Background:
-    def __init__(self, image_path = BACKGROUND_IMAGE_PATH, screen_width = SCREEN_WIDTH, screen_height = SCREEN_HEIGHT, scroll_speed = BACKGROUND_SCROLL_SPEED):
+    def __init__(self, image_path = BACKGROUND_PATH, screen_width = SCREEN_WIDTH, screen_height = SCREEN_HEIGHT, scroll_speed = BACKGROUND_SCROLL_SPEED):
         self.image = pg.image.load(image_path).convert_alpha()
         self.image = pg.transform.smoothscale(self.image, (screen_width, screen_height))
         self.width = self.image.get_width()

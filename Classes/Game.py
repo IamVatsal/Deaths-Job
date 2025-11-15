@@ -27,15 +27,12 @@ class Game1:
         self.background = Background(BACKGROUND_PATH, self.screen_width, self.screen_height)
 
         # Game Objects
-        # self.obstacle = Obstacle(500, 400)
         self.obstacles = Obstacles(num_of_obstacles=10)
 
         # Splash Screen
         self.SplashScreen = SplashScreen(self.screen_width, self.screen_height)
 
         self.current_state = GameState.SPLASH
-        self.current_screen = 'splash'
-
         
     def handle_events(self):
 
@@ -47,6 +44,8 @@ class Game1:
                     self.current_state = GameState.PLAYING
                 elif self.current_state == GameState.SPLASH and self.SplashScreen.collide(event.pos) == GameState.EXIT:
                     self.running = False
+                elif self.current_state == GameState.PLAYING:
+                    self.player.jump()
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE: 
                     if self.current_state == GameState.PLAYING:
@@ -76,8 +75,6 @@ class Game1:
                 self.current_state = GameState.SPLASH
                 self.player.reset()
                 self.obstacles.reset()
-                # print("Collision detected!")
-                # self.running = False
     
     def render(self):
         if self.current_state == GameState.SPLASH:

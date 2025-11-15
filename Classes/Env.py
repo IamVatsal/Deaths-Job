@@ -1,5 +1,5 @@
 import os
-from tkinter import SE
+from re import S
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -18,14 +18,14 @@ WINDOW_TITLE = os.getenv('WINDOW_TITLE', "Death's Job")
 BACKGROUND_SCROLL_SPEED = int(os.getenv('BACKGROUND_SCROLL_SPEED', '35'))
 
 # Asset paths
-BACKGROUND_IMAGE_PATH = os.getenv('BACKGROUND_IMAGE_PATH', 'data/gfx/Clouds_1.png')
 GHOST_SPRITE_PATH = os.getenv('GHOST_SPRITE_PATH', 'data/gfx/ghost.png')
-BACKGROUND_PATH = os.getenv('BACKGROUND_PATH', 'data/gfx/Clouds_1.png')
-OBSTACLE_IMAGE_PATH = os.getenv("OBSTACLE_IMAGE_PATH", "data/gfx/fence.png")
-SPLASH_SCREEN_BG = os.getenv('SPLASH_SCREEN_BG', 'data/gfx/castle.png')
-START_BUTTON_IMAGE = os.getenv('START_BUTTON_IMAGE', 'data/gfx/start_button.png')
-SETTINGS_BUTTON_IMAGE = os.getenv('SETTINGS_BUTTON_IMAGE', 'data/gfx/settings_button.png')
-EXIT_BUTTON_IMAGE = os.getenv('EXIT_BUTTON_IMAGE', 'data/gfx/exit_button.png')
+BACKGROUND_PATH = os.getenv('BACKGROUND_PATH', 'data/gfx/background.png')
+OBSTACLE_IMAGE_PATH = os.getenv("OBSTACLE_IMAGE_PATH", "data/gfx/poll_new.png")
+SPLASH_SCREEN_BG = os.getenv('SPLASH_SCREEN_BG', 'data/gfx/back.png')
+START_BUTTON_IMAGE = os.getenv('START_BUTTON_IMAGE', 'data/gfx/start_button_normal.png')
+EXIT_BUTTON_IMAGE = os.getenv('EXIT_BUTTON_IMAGE', 'data/gfx/exit_button_normal.png')
+START_BUTTON_HOVER_IMAGE = os.getenv('START_BUTTON_HOVER_IMAGE', 'data/gfx/start_button_hover.png')
+EXIT_BUTTON_HOVER_IMAGE = os.getenv('EXIT_BUTTON_HOVER_IMAGE', 'data/gfx/exit_button_hover.png')
 
 # Player environment variables
 PLAYER_SPRITE_PATH = os.getenv('PLAYER_SPRITE_PATH', 'data/gfx/ghost.png')
