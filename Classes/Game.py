@@ -43,8 +43,10 @@ class Game1:
             if event.type == pg.QUIT:
                 self.running = False
             elif event.type == pg.MOUSEBUTTONDOWN:
-                if self.current_state == GameState.SPLASH and self.SplashScreen.collide(event.pos):
+                if self.current_state == GameState.SPLASH and self.SplashScreen.collide(event.pos) == GameState.PLAYING:
                     self.current_state = GameState.PLAYING
+                elif self.current_state == GameState.SPLASH and self.SplashScreen.collide(event.pos) == GameState.EXIT:
+                    self.running = False
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE: 
                     if self.current_state == GameState.PLAYING:

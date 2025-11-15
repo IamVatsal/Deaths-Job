@@ -15,7 +15,7 @@ class Obstacle(Entity):
     def load_image(self, path):
         """Load sprite image and scale it down"""
         self.image = pg.image.load(path).convert_alpha()
-        self.image = pg.transform.smoothscale(self.image, (self.image.get_width() // 2, self.image.get_height() // 1))
+        self.image = pg.transform.smoothscale(self.image, (self.image.get_width() // 3, self.image.get_height() // 3))
         self.width = self.image.get_width()
         self.height = self.image.get_height()
 
