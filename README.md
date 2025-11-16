@@ -10,6 +10,13 @@ A 2D arcade-style game built with Pygame where you control a ghost navigating th
 
 In Death's Job, you play as a ghost navigating through pairs of obstacles (top and bottom) while managing gravity and momentum. The game features smooth physics, pixel-perfect collision detection with mask-based collision, a scrolling cloud background, sound effects, background music, and an interactive castle-themed splash screen.
 
+## 🎥 Screen Recording
+
+
+https://github.com/user-attachments/assets/f5515ea4-7d1e-4d43-94c5-df0f99ec18ab
+
+
+
 ## ✨ Features
 
 - **Interactive Splash Screen**: Start screen with hover effects on buttons (Start/Exit)
@@ -226,6 +233,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👤 Author
 
 **Vatsal Patel**
+
+**My Skils** 😅
+
+![Death Game FF](https://github.com/user-attachments/assets/dacf298d-1135-41b5-8e59-7bb4df63ec72)
 
 ## 🙏 Acknowledgments
 
