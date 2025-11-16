@@ -243,7 +243,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Inspired by the classic Flappy Bird game
 - Built with Pygame Community Edition
 - Uses python-dotenv for configuration management
-- Background music: "Blues Guitar Loop" by [Artist Name]
+- Background music: "Blues Guitar Loop" by Ncone
 
 ---
 
