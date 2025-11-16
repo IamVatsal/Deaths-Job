@@ -129,7 +129,7 @@ Death's Job/
 
 ### Key Components
 
-- **[`main.py`](main.py)**: Entry point that initializes [`Game1`](Classes/Game.py) and starts the game loop
+- **[`main.py`](main.py)**: Entry point that initializes [`Game`](Classes/Game.py) and starts the game loop
 - **[`Classes/Game.py`](Classes/Game.py)**: Main game class with event handling, update loop, rendering, and sound management
 - **[`Classes/GameState.py`](Classes/GameState.py)**: Enum defining game states (SPLASH, PLAYING, PAUSED, GAME_OVER, EXIT)
 - **[`Classes/Player.py`](Classes/Player.py)**: Player physics, sprite flipping, collision mask, and movement logic
